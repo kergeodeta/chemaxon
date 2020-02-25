@@ -1,0 +1,7 @@
+ansible
+blueocean
+credentials
+docker-plugin
+git
+github
+sonar
