@@ -1,0 +1,22 @@
+- hosts: all
+  become: yes
+
+  pre_tasks:
+    - name: "Createing filesystems and mount them"
+      import_tasks: "mount_volumes.yml"
+
+    - name: "Install python dependencies"
+      import_tasks: "install_python3.yml"
+
+    - name: "Install Docker Engine"
+      import_tasks: "install_docker.yml"
+
+  roles:
+    - role: install_tls
+      when: inventory_hostname == "chemaxon_alm"
+
+    - role: install_nginx
+      when: inventory_hostname == "chemaxon_alm"
+
+  tasks:
+    - import_tasks: install_ansible.yml
