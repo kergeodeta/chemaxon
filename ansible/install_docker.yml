@@ -1,0 +1,53 @@
+- name: "Create docker group"
+  group:
+    name: "docker"
+    state: "present"
+
+- name: "Create docker user"
+  user:
+    group: "docker"
+    name: "docker"
+
+- name: "Install packages to allow apt to use a repository over HTTPS"
+  apt:
+    name:
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "gnupg-agent"
+      - "software-properties-common"
+      - "jq"
+    state: "present"
+    update_cache: "yes"
+
+- name: "Add Docker’s official GPG key"
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+    state: "present"
+
+- name: "Add Docker stable repository"
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+    state: "present"
+
+- name: "Install Docker Engine"
+  apt:
+    name:
+      - "docker-ce"
+      - "docker-ce-cli"
+      - "containerd.io"
+    state: "present"
+    update_cache: "yes"
+
+- name: "Install docker python module"
+  pip:
+    executable: "/usr/bin/pip3"
+    name:
+      - docker
+    umask: "0022"
+
+- name: "Create docker network"
+  docker_network:
+    ipam_config:
+      - gateway: "10.0.0.1"
+        subnet: "10.0.0.0/24"
+    name: hwnet
