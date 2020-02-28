@@ -1,0 +1,24 @@
+
+- name: "Create filesystem on {{ data_dev }} device"
+  filesystem:
+    fstype: "ext4"
+    dev: "{{ data_dev }}"
+
+- name: "Mount {{ data_dev }} device to /data"
+  mount:
+    fstype: "ext4"
+    path: "/data"
+    src: "{{ data_dev }}"
+    state: "mounted"
+
+- name: "Create filesystem on {{ docker_dev }} device"
+  filesystem:
+    fstype: "ext4"
+    dev: "{{ docker_dev }}"
+
+- name: "Mount {{ docker_dev }} device to /var/lib/docker"
+  mount:
+    fstype: "ext4"
+    path: "/var/lib/docker"
+    src: "{{ docker_dev }}"
+    state: "mounted"
