@@ -1,0 +1,19 @@
+- name: "Create ansible group"
+  group:
+    name: "ansible"
+    state: "present"
+
+- name: "Create ansible user"
+  user:
+    group: "ansible"
+    name: "ansible"
+    password: "{{ ansible_agent_password }}"
+    update_password: "on_create"
+
+- name: "Install ansible"
+  pip:
+    executable: "/usr/bin/pip3"
+    name:
+      - ansible
+    umask: "0022"
+  when: inventory_hostname == "chemaxon_alm"
