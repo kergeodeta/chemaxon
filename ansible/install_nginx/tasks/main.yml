@@ -1,0 +1,33 @@
+- name: "Create directory for NGINX stuffs"
+  file:
+    path: "/etc/nginx/"
+    state: "directory"
+    recurse: "yes"
+
+- name: "Copy configuration files"
+  copy:
+    src: "{{ role_path }}/files/{{ item.name }}"
+    dest: "/etc/nginx/{{ item.dest }}/{{ item.name }}"
+    mode: "{{ item.permission }}"
+  with_items:
+    - { name: "nginx.conf", permission: "0644", dest: "" }
+#   - { name: "jenkins.conf", permission: "0644", dest: "conf.d" }
+#   - { name: "registry.conf", permission: "0644", dest: "conf.d" }
+    - { name: "application.conf", permission: "0644", dest: "conf.d" }
+
+- name: "Run NGINX container"
+  docker_container:
+    image: nginx:1.17-alpine
+    volumes:
+      - "/var/log/nginx/:/var/log/nginx/"
+      - "/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "/etc/nginx/conf.d/:/etc/nginx/conf.d/"
+      - "/etc/ssl/thebinaryowl.dev/:/etc/ssl/thebinaryowl.dev/"
+    name: nginx
+    networks:
+      - name: hwnet
+    published_ports:
+      - "80:80"
+      - "443:443"
+    restart: yes
+    restart_policy: unless-stopped
