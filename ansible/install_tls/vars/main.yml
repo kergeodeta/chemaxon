@@ -1,0 +1,7 @@
+key_path: "/etc/ssl/thebinaryowl.dev/thebinaryowl_dev.key"
+csr_path: "/etc/ssl/thebinaryowl.dev/thebinaryowl_dev.csr"
+crt_path: "/etc/ssl/thebinaryowl.dev/thebinaryowl_dev.crt"
+fullchain_path: "/etc/ssl/thebinaryowl.dev/thebinaryowl_dev-fullchain.crt"
+intermediate_path: "/etc/ssl/thebinaryowl.dev/thebinaryowl_dev-intermediate.crt"
+account_key_path: "/etc/ssl/acme/account_domain.key"
+account_email: "kergeodeta@gmail.com"

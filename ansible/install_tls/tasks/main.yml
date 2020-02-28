@@ -1,0 +1,36 @@
+- name: "Generating self-signed certificate"
+  import_tasks: "generate_selfsigned_certs.yml"
+
+- name: "Challenge TLS certificate"
+  acme_certificate:
+    acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+    acme_version: "2"
+    account_email: "{{ account_email }}"
+    account_key_src: "{{ account_key_path }}"
+    csr: "{{ csr_path }}"
+    dest: "{{ crt_path }}"
+    terms_agreed: "yes"
+  register: tls_challenge
+
+- name: "Run NGINX for http-01 challenge"
+  import_tasks: "nginx.yml"
+  vars:
+    challenge: "{{ tls_challenge }}"
+    challenge_dir: "/data/acme/challenge"
+
+- name: "Get TLS certificate"
+  acme_certificate:
+    account_email: "{{ account_email }}"
+    account_key_src: "{{ account_key_path }}"
+    acme_directory: "https://acme-v02.api.letsencrypt.org/directory"
+    acme_version: "2"
+    cert: "{{ crt_path }}"
+    chain: "{{ intermediate_path }}"
+    data: "{{ tls_challenge }}"
+    fullchain: "{{ fullchain_path }}"
+    remaining_days: 60
+    src: "{{ csr_path }}"
+  when: tls_challenge is changed
+#
+#- name: "Cleaning up"
+#  import_tasks: "cleanup.yml"

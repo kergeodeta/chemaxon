@@ -1,0 +1,33 @@
+- name: "Install module dependencies"
+  pip:
+    executable: "/usr/bin/pip3"
+    name:
+      - "acme-tiny"
+    umask: "0022"
+
+- name: "Create directory for store certs"
+  file:
+    path: "{{ item }}"
+    state: "directory"
+    recurse: "yes"
+  with_items:
+    - "/etc/ssl/thebinaryowl.dev/"
+    - "/etc/ssl/acme/"
+
+- name: "Generate privatekey"
+  openssl_privatekey:
+    path: "{{ key_path }}"
+  register: privatekey
+
+- name: "Generate ACME account key"
+  openssl_privatekey:
+    path: "{{ account_key_path }}"
+
+- name: "Generate CSR"
+  openssl_csr:
+    common_name: "thebinaryowl.dev"
+    country_name: "HU"
+    email_address: "kergeodet@gmail.com"
+    path: "{{ csr_path }}"
+    privatekey_path: "{{ privatekey.filename }}"
+    organization_name: "TheBinaryOwl"

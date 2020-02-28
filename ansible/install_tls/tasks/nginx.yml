@@ -1,0 +1,40 @@
+- name: "Create directory for NGINX stuffs"
+  file:
+    path: "/etc/nginx/conf.d/"
+    state: "directory"
+    recurse: "yes"
+
+- name: "Copy configuration files"
+  copy:
+    src: "{{ role_path }}/files/{{ item.name }}"
+    dest: "/etc/nginx/{{ item.dest }}/{{ item.name }}"
+    mode: "{{ item.permission }}"
+  with_items:
+    - { name: "nginx.conf", permission: "0644", dest: "" }
+    - { name: "acme_challenge.conf", permission: "0644", dest: "conf.d" }
+
+- name: "Create .well-known/acme-challenge directory"
+  file:
+    path: "{{ challenge_dir }}/.well-known/acme-challenge"
+    state: "directory"
+    recurse: "yes"
+
+- name: "Implement http-01 challenge files"
+  copy:
+    dest: "{{ challenge_dir }}/{{ challenge['challenge_data']['thebinaryowl.dev']['http-01']['resource'] }}"
+    content: "{{ challenge['challenge_data']['thebinaryowl.dev']['http-01']['resource_value'] }}"
+  when: challenge is changed
+
+- name: "Run NGINX container"
+  docker_container:
+    image: nginx:1.17-alpine
+    volumes:
+      - "/var/log/nginx/:/var/log/nginx/"
+      - "/etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "/etc/nginx/conf.d/:/etc/nginx/conf.d/"
+      - "{{ challenge_dir }}:/usr/share/nginx/html/"
+    name: nginx
+    published_ports:
+      - "80:80"
+    restart_policy: unless-stopped
+    restart: yes
