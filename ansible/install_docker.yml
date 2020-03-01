@@ -16,6 +16,7 @@
       - "gnupg-agent"
       - "software-properties-common"
       - "jq"
+      - "sshpass"
     state: "present"
     update_cache: "yes"
 
