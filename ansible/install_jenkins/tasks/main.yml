@@ -1,0 +1,63 @@
+- name: "Install Jenkins dependencies"
+  apt:
+    name:
+      - "openjdk-8-jdk"
+      - "unzip"
+    state: "present"
+
+- name: "Add Jenkins’s official GPG key"
+  apt_key:
+    url: "https://pkg.jenkins.io/debian/jenkins.io.key "
+    state: "present"
+
+- name: "Add Jenkins repository"
+  apt_repository:
+    repo: "deb http://pkg.jenkins.io/debian-stable binary/"
+    state: "present"
+
+- name: "Create Jenkins home directory"
+  file:
+    path: "{{ jenkins_home }}/init.groovy.d/"
+    state: "directory"
+    recurse: "yes"
+
+- name: "Install Jenkins"
+  apt:
+    name: "jenkins"
+    state: "present"
+    update_cache: "yes"
+
+- name: "Copy initialization scripts"
+  copy:
+    src: "files/init.groovy.d/{{ item }}"
+    dest: "{{ jenkins_home }}/init.groovy.d/{{ item }}"
+    mode: "0755"
+    group: "jenkins"
+    owner: "jenkins"
+  with_items:
+    - "init_ansible_user.groovy"
+    - "init_users.groovy"
+    - "skip_init_wizard.groovy"
+
+- name: "Copy plugins.txt"
+  copy:
+    src: "files/plugins.txt"
+    dest: "{{ jenkins_home }}/plugins.txt"
+    mode: "0644"
+    group: "jenkins"
+    owner: "jenkins"
+
+- name: "Run Jenkins as systemd service"
+  systemd:
+    name: "jenkins"
+    state: "restarted"
+    enabled: "true"
+
+#- name: "Waiting for Jenkins"
+#  wait_for:
+#    connect_timeout: 15
+#    delay: 5
+#    port: 8080
+#
+#- name: "Install predefined plugins"
+#  shell: "java -jar /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar -s http://localhost:8080 install-plugin {{ jenkins_home }}/plugins.txt -restart"
