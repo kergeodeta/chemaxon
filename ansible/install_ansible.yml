@@ -8,7 +8,11 @@
     group: "ansible"
     name: "ansible"
     password: "{{ ansible_agent_password }}"
-    update_password: "on_create"
+#    update_password: "on_create"
+
+- name: "Ansible password"
+  debug:
+    msg: "{{ ansible_agent_password }}"
 
 - name: "Install ansible"
   pip:
