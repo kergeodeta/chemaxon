@@ -5,7 +5,5 @@
 *.tfstate
 *.tfstate.backup
 
-infra/
-
 ssh/*
 credentials.json
