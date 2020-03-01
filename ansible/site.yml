@@ -11,6 +11,9 @@
     - name: "Install Docker Engine"
       import_tasks: "install_docker.yml"
 
+    - name: "Install Ansible"
+      import_tasks: "install_ansible.yml"
+
   roles:
     - role: install_tls
       when: inventory_hostname == "chemaxon_alm"
@@ -18,5 +21,5 @@
     - role: install_nginx
       when: inventory_hostname == "chemaxon_alm"
 
-  tasks:
-    - import_tasks: install_ansible.yml
+    - role: install_jenkins
+      when: inventory_hostname == "chemaxon_alm"
