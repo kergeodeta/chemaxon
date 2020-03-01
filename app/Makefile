@@ -3,6 +3,7 @@ build:
 	@echo "Build application image"
 	@docker image build --no-cache \
 		--tag kergeodeta/angles:v1.0.0 \
+		--tag kergeodeta/angles:latest \
 		.
 
 test:
@@ -22,7 +23,9 @@ push:
 deploy:
 	@echo "Deploy the application"
 
+
 clean:
 	@echo "Remove docker images"
 	@docker image rm -f kergeodeta/angles:v1.0.0 || true
+	@docker image rm -f kergeodeta/angles:latest || true
 	@docker image rm -f kergeodeta/angles:v1.0.0-test || true
