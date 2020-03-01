@@ -34,3 +34,5 @@
 
 - name: "Cleaning up"
   import_tasks: "cleanup.yml"
+  vars:
+    challenge_dir: "/data/acme/challenge"

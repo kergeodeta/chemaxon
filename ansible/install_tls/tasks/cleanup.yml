@@ -7,16 +7,13 @@
   file:
     path: "{{ challenge_dir }}"
     state: "absent"
-    recurse: "yes"
 
 - name: "Deleting NGINX log directory"
   file:
     path: "/var/log/nginx/"
     state: "absent"
-    recurse: "yes"
 
 - name: "Deleting NGINX directory"
   file:
     path: "/etc/nginx"
     state: "absent"
-    recurse: "yes"
