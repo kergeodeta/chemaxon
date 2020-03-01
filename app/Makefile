@@ -20,10 +20,6 @@ push:
 	@echo "Publish docker images"
 	@docker image push kergeodeta/angles:$version
 
-deploy:
-	@echo "Deploy the application"
-
-
 clean:
 	@echo "Remove docker images"
 	@docker image rm -f kergeodeta/angles:$version|| true
