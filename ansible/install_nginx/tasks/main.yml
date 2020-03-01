@@ -1,6 +1,6 @@
 - name: "Create directory for NGINX stuffs"
   file:
-    path: "/etc/nginx/"
+    path: "/etc/nginx/conf.d/"
     state: "directory"
     recurse: "yes"
 
