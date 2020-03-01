@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Angles</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<form action="/doit" method="post">
+    <div class="row">
+        <div class="col">
+            <input type="text" name="val-x">
+            <select name="type-x" id="">
+                <option value="dms">dms</option>
+                <option value="deg">deg</option>
+                <option value="rad">rad</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <select name="op-type">
+                <option value="0">+</option>
+                <option value="1">-</option>
+            </select>
+
+            <input type="text" name="val-y">
+            <select name="type-y">
+                <option value="dms">dms</option>
+                <option value="deg">deg</option>
+                <option value="rad">rad</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ . }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <input type="submit" value="Do It!">
+            <select name="res-type">
+                <option value="dms">dms</option>
+                <option value="deg">deg</option>
+                <option value="rad">rad</option>
+            </select>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>
