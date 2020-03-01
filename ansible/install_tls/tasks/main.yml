@@ -31,6 +31,6 @@
     remaining_days: 60
     src: "{{ csr_path }}"
   when: tls_challenge is changed
-#
-#- name: "Cleaning up"
-#  import_tasks: "cleanup.yml"
+
+- name: "Cleaning up"
+  import_tasks: "cleanup.yml"
