@@ -11,8 +11,8 @@
     mode: "{{ item.permission }}"
   with_items:
     - { name: "nginx.conf", permission: "0644", dest: "" }
-    - { name: "jenkins.conf", permission: "0644", dest: "conf.d" }
-    - { name: "application.conf", permission: "0644", dest: "conf.d" }
+    - { name: "01_jenkins.conf", permission: "0644", dest: "conf.d" }
+    - { name: "99_application.conf", permission: "0644", dest: "conf.d" }
 
 - name: "Run NGINX container"
   docker_container:
