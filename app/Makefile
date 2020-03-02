@@ -15,7 +15,6 @@ test:
 
 	@echo "Run unit tests"
 	@docker container run --rm kergeodeta/angles:${version}-test
-	@docker container rm -f kergeodeta/angles:${version}-test
 
 publish:
 	@echo "Publish docker images"
