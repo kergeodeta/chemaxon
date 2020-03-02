@@ -10,9 +10,12 @@
     password: "{{ ansible_agent_password }}"
 #    update_password: "on_create"
 
-- name: "Ansible password"
-  debug:
-    msg: "{{ ansible_agent_password }}"
+- name: "Create environment variable which contains ansible password"
+  lineinfile:
+    path: "/etc/profile"
+    line: "export ANSIBLE_PASSWORD='{{ ansible_agent_password }}'"
+    create: "yes"
+  when: inventory_hostname == "chemaxon_alm"
 
 - name: "Install ansible"
   pip:
