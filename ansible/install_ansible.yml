@@ -17,6 +17,12 @@
     create: "yes"
   when: inventory_hostname == "chemaxon_alm"
 
+- name: "Create environment variable which contains ansible password"
+  lineinfile:
+    path: "/etc/sudoers"
+    line: "ansible ALL=(ALL) NOPASSWD: ALL"
+    create: "yes"
+
 - name: "Install ansible"
   pip:
     executable: "/usr/bin/pip3"
