@@ -11,21 +11,21 @@ users.each { username, v ->
      full_name = v["full_name"]
 
      def user = hudson.model.User.get(username)
-         user.setFullName(full_name)
+     user.setFullName(full_name)
 
-         def email_param = new hudson.tasks.Mailer.UserProperty(email)
-         user.addProperty(email_param)
+     def email_param = new hudson.tasks.Mailer.UserProperty(email)
+     user.addProperty(email_param)
 
-         def password = UUID.randomUUID().toString().replaceAll("-", "")
-         def pw_param = hudson.security.HudsonPrivateSecurityRealm.Details.fromPlainPassword(password)
-         user.addProperty(pw_param)
+     def password = UUID.randomUUID().toString().replaceAll("-", "")
+     def pw_param = hudson.security.HudsonPrivateSecurityRealm.Details.fromPlainPassword(password)
+     user.addProperty(pw_param)
 
-         println """
+     println """
 
-            ########################
-            ${username}: ${password}
+        ########################
+        ${username}: ${password}
 
-         """
+     """
 
-         user.save()
+     user.save()
 }
