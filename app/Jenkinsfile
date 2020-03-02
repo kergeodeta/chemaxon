@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    environment {
+        version = 'v1.0.0'
+    }
+
+    stages {
+        stage('Checkout scm') {
+            steps {
+                git 'https://github.com/kergeodeta/chemaxon.git'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/app") {
+                        sh """
+                            version=${version} make test
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/app") {
+                        sh "version=${version} make build"
+                    }
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script {
+                    dir("${env.WORKSPACE}/app") {
+                        sh "version=${version} make publish"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                ansiblePlaybook(
+                    become: true,
+                    colorized: true,
+                    credentialsId: 'ansible_ssh',
+                    extras: "--ssh-extra-args='-o StrictHostKeyChecking=no' --extra-vars='app_version=${version}'",
+                    inventory: 'app/ansible/inventory',
+                    playbook: 'app/ansible/site.yml')
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                dir("${env.WORKSPACE}/app") {
+                    sh "version=${version} make clean"
+                }
+            }
+        }
+    }
+}
