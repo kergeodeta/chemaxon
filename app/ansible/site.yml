@@ -7,7 +7,7 @@
         image: "kergeodeta/angles:{{ app_version }}"
         name: "angles"
         published_ports:
-          - "8080:8080"
+          - "9000:8080"
         pull: yes
         recreate: yes
         restart_policy: always
